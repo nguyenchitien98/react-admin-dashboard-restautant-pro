@@ -14,6 +14,8 @@ import AccountPage from './pages/AccountPage';
 import NotificationsPage from './pages/NotificationsPage';
 import { useEffect, useState, useRef } from 'react';
 import SidebarNotification from './components/ui/SidebarNotification';
+import POSPage from './pages/POSPage';
+import ProductCategoryPage from './pages/ProductCategoryPage';
 
 function DashboardLayout({ children }) {
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -36,7 +38,7 @@ function DashboardLayout({ children }) {
       }
 
       // 3 giây sau tắt thông báo
-      setTimeout(() => setShowNotification(false), 10000);
+      setTimeout(() => setShowNotification(false), 5000);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -144,6 +146,16 @@ export default function App() {
                 <NotificationsPage />
               </DashboardLayout>
             }/>
+            <Route path="/pos" element={
+            <DashboardLayout>
+              <POSPage />
+            </DashboardLayout>
+          } />
+          <Route path="/product-categories" element={
+          <DashboardLayout>
+            <ProductCategoryPage />
+          </DashboardLayout>
+        } />
       </Routes>
   );
 }

@@ -13,6 +13,8 @@ import {
   BookOpen,
   Bell,
   User,
+  CreditCard,
+  Utensils
 } from 'lucide-react';
 import { Menu } from '@headlessui/react';
 
@@ -20,8 +22,8 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const user = {
-    name: 'John Doe',
-    avatar: 'https://i.pravatar.cc/100?img=3',
+    name: 'Chí Tiến',
+    avatar: '/image/profile.jpg',
   };
 
   const notifications = [
@@ -47,15 +49,18 @@ export default function Sidebar() {
 
   const links = [
     { to: '/', title: 'Trang Chủ', icon: LayoutDashboard },
-    { to: '/orders', title: 'Quản Lý Đơn hàng', icon: ClipboardList },
+    { to: '/product-categories', title: 'Quản Lý Loại Thực Đơn', icon: Utensils },
     { to: '/menu', title: 'Quản Lý Thực đơn', icon: Coffee },
     { to: '/kitchen', title: 'Quản Lý Bếp', icon: Flame },
+    { to: '/orders', title: 'Quản Lý Đơn hàng', icon: ClipboardList },
+    { to: '/pos', title: 'POS', icon: CreditCard }, // hoặc ShoppingCart
     { to: '/tables', title: 'Quản Lý Bàn', icon: LayoutGrid },
     { to: '/inventory', title: 'Quản Lý Kho', icon: Boxes },
     { to: '/employees', title: 'Quản Lý Nhân Viên', icon: Users },
     { to: '/report', title: 'Báo Cáo', icon: BarChart },
     { to: '/tutorials', title: 'Công Thức / Hướng Dẫn', icon: BookOpen },
     { to: '/accounts', title: 'Tài khoản', icon: User },
+    
   ];
 
   return (

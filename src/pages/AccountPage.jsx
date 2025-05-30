@@ -20,13 +20,13 @@ export default function AccountPage() {
         </div>
         <div className="flex items-center space-x-4">
           <img
-            src="https://i.pravatar.cc/100?img=3"
+            src="/image/profile.jpg"
             alt="Avatar"
             className="w-16 h-16 rounded-full object-cover"
           />
           <div>
-            <p className="font-semibold text-green-900">John Doe</p>
-            <p className="text-gray-600 text-sm">john.doe@example.com</p>
+            <p className="font-semibold text-green-900">Chí Tiến</p>
+            <p className="text-gray-600 text-sm">chi.tien@example.com</p>
           </div>
         </div>
         <div className="mt-4 flex space-x-2">
