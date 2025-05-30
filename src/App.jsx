@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
+import Sidebar1 from './components/Sidebar1';
 import OrderManagementPage from './pages/OrderManagementPage';
 import MenuManagementPage from './pages/MenuManagementPage';
 import KitchenManagementPage from './pages/KitchenManagementPage';
@@ -15,7 +16,7 @@ import NotificationsPage from './pages/NotificationsPage';
 function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar />
+      <Sidebar1 />
       <main className="flex-1">{children}</main>
     </div>
   );

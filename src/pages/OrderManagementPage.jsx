@@ -201,18 +201,7 @@ export default function OrderManagementPage() {
                       <p className="text-sm font-medium mt-2">Tổng: {order.total.toLocaleString()}đ</p>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2">
-                      <Button
-                        className="bg-primary text-white px-4 py-2 rounded-xl"
-                        onClick={() => {
-                          setOrders(prev =>
-                            prev.map(o =>
-                              o.id === order.id ? { ...o, status: 'done' } : o
-                            )
-                          );
-                        }}
-                      >
-                        Hoàn tất
-                      </Button>
+                      
                       <Button
                         variant="outline"
                         className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 text-sm"
@@ -225,7 +214,7 @@ export default function OrderManagementPage() {
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-sm"
                         onClick={() => handleDeleteOrder(order.id)}
                       >
-                        Xóa
+                        Hủy
                       </Button>
                     </div>
                   </div>
