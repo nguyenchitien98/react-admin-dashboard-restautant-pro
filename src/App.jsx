@@ -12,13 +12,54 @@ import TutorialPage from './pages/TutorialPage';
 import DashboardPage from './pages/DashboardPage';
 import AccountPage from './pages/AccountPage';
 import NotificationsPage from './pages/NotificationsPage';
+import { useEffect, useState, useRef } from 'react';
+import SidebarNotification from './components/ui/SidebarNotification';
 
 function DashboardLayout({ children }) {
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState('error');
+
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNotificationMessage('🔔 Có đơn hàng mới vừa tạo!');
+      setNotificationType('succes');
+      setShowNotification(true);
+
+      // Phát âm thanh
+      if (audioRef.current) {
+        audioRef.current.play().catch((e) => {
+          console.warn('Cannot auto-play sound:', e);
+        });
+      }
+
+      // 3 giây sau tắt thông báo
+      setTimeout(() => setShowNotification(false), 10000);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar1 />
-      <main className="flex-1">{children}</main>
-    </div>
+    <>
+      <div className="flex min-h-screen bg-background">
+        <Sidebar1 />
+        <main className="flex-1">{children}</main>
+      </div>
+
+       {/* Notification */}
+       <SidebarNotification
+        message={notificationMessage}
+        visible={showNotification}
+        type={notificationType}
+        onClose={() => setShowNotification(false)}
+      />
+
+      {/* Âm thanh ping */}
+      <audio ref={audioRef} src="/sounds/ding.wav" preload="auto" />
+    </>
   );
 }
 
