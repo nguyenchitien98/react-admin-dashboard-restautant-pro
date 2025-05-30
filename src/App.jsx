@@ -9,6 +9,8 @@ import EmployeeManagementPage from './pages/EmployeeManagementPage';
 import ReportPage from './pages/ReportPage';
 import TutorialPage from './pages/TutorialPage';
 import DashboardPage from './pages/DashboardPage';
+import AccountPage from './pages/AccountPage';
+import NotificationsPage from './pages/NotificationsPage';
 
 function DashboardLayout({ children }) {
   return (
@@ -86,6 +88,20 @@ export default function App() {
               <TutorialPage />
             </DashboardLayout>
             } />
+            <Route
+              path="/accounts"
+              element={
+                <DashboardLayout>
+                  <AccountPage />
+                </DashboardLayout>
+              }
+            />
+            <Route path="/notifications"
+            element={
+              <DashboardLayout>
+                <NotificationsPage />
+              </DashboardLayout>
+            }/>
       </Routes>
   );
 }
