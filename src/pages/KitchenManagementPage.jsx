@@ -14,11 +14,17 @@ export default function KitchenManagementPage() {
       items: [
         { name: 'Cà phê sữa', quantity: 2 },
         { name: 'Bánh tráng trộn', quantity: 1 },
+        { name: 'Bánh tráng trộn', quantity: 1 },
       ],
       status: STATUS.IN_PROGRESS,
     },
     {
       id: 102,
+      items: [{ name: 'Trà đào', quantity: 1 }],
+      status: STATUS.PENDING,
+    },
+    {
+      id: 103,
       items: [{ name: 'Trà đào', quantity: 1 }],
       status: STATUS.PENDING,
     },
@@ -35,7 +41,7 @@ export default function KitchenManagementPage() {
   return (
     <div className="p-4 space-y-6">
       <h1 className="text-3xl font-bold text-primary">Bếp</h1>
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {orders.map(order => (
             <div
             key={order.id}

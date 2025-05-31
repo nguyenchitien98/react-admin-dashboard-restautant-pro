@@ -22,6 +22,13 @@ export default function MenuManagementPage() {
       category: 'Ăn vặt',
       image: defaultImage,
     },
+    {
+      id: 3,
+      name: 'Trà chanh',
+      price: '25.000đ',
+      category: 'Nước',
+      image: defaultImage,
+    },
   ]);
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -72,7 +79,7 @@ export default function MenuManagementPage() {
         <Button onClick={openAddModal} className="text-white">+ Thêm món</Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {menuItems.map(item => (
           <div
             key={item.id}
