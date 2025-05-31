@@ -1,63 +1,40 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Coffee,
-  ShoppingCart,
-  Users,
-  CreditCard,
-  Printer,
-  Clock,
-  Settings,
+  ClipboardList,
+  FileText,
+  Truck,
+  ShoppingBag,
+  Home,
 } from 'lucide-react';
-import CartPanel from './POS/CartPanel';
-import CheckoutPanel from './POS/CheckoutPanel';
 import OrderSelection from './POS/OrderSelection';
-import CustomerTablePanel from './POS/CustomerTablePanel';
-import RecentOrdersPanel from './POS/RecentOrdersPanel';
-import PrinterSettingsPanel from './POS/PrinterSettingsPanel';
-import SettingsPanel from './POS/SettingsPanel';
+// import HoldOrdersPanel from './POS/HoldOrdersPanel';
+// import BillListPanel from './POS/BillListPanel';
+// import KOTPanel from './POS/KOTPanel';
+// import DeliveryMethodPanel from './POS/DeliveryMethodPanel';
+// import TakeAwayPanel from './POS/TakeAwayPanel';
 
 const tabs = [
   { key: 'menu', title: 'Chọn món', icon: Coffee },
-  { key: 'cart', title: 'Giỏ hàng', icon: ShoppingCart },
-  { key: 'customer', title: 'Khách & Bàn', icon: Users },
-  { key: 'payment', title: 'Thanh toán', icon: CreditCard },
-  { key: 'printer', title: 'Máy in', icon: Printer },
-  { key: 'recent', title: 'Đơn gần đây', icon: Clock },
-  { key: 'settings', title: 'Cài đặt', icon: Settings },
+  { key: 'hold', title: 'Tạm giữ', icon: ClipboardList },
+  { key: 'bill', title: 'Hóa đơn', icon: FileText },
+  { key: 'kot', title: 'KOT', icon: ClipboardList },
+  { key: 'delivery', title: 'Giao hàng', icon: Truck },
+  { key: 'takeaway', title: 'Mang đi', icon: ShoppingBag },
+  { key: 'dinin', title: 'Tại quán', icon: Home },
 ];
 
 export default function POSPage() {
-  // Giả sử cartItems là state quản lý giỏ hàng
-  const [cartItems, setCartItems] = useState([
-    // ví dụ item
-    // { id: 1, name: 'Cà phê sữa', price: 30000, quantity: 2 },
-    // { id: 2, name: 'Bánh mì', price: 20000, quantity: 1 },
-  ]);
-
-  const [selectedTable, setSelectedTable] = useState(null);
-  const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    phone: '',
-    note: '',
-  });
-
-  const orderTotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
-  // Hàm xử lý thanh toán (bạn có thể viết logic thực tế)
-  const handleCheckout = () => {
-    alert(`Thanh toán tổng ${orderTotal} VNĐ`);
-    // Xử lý logic thanh toán
-  };
-
+  const [cartItems, setCartItems] = useState([]);
   const [activeTab, setActiveTab] = useState('menu');
+
+  const contentRef = useRef(null);
+
 
   return (
     <div className="flex flex-col h-full p-4">
-      {/* Thanh icon tab */}
-      <div className="flex space-x-4 mb-4">
+      {/* Sidebar Tabs */}
+      <div className="flex space-x-4 mb-4 overflow-x-auto">
         {tabs.map(({ key, title, icon: Icon }) => (
           <button
             key={key}
@@ -74,36 +51,21 @@ export default function POSPage() {
         ))}
       </div>
 
-      {/* Nội dung tương ứng từng tab */}
-      <div className="flex-1 bg-white rounded-xl shadow p-4 overflow-auto">
+      {/* Main Content */}
+      <div ref={contentRef} className="flex-1 bg-white rounded-xl shadow p-4 overflow-auto">
         {activeTab === 'menu' && (
-          <OrderSelection
-            cartItems={cartItems}
-            setCartItems={setCartItems}
-          />
+          <OrderSelection cartItems={cartItems} setCartItems={setCartItems} />
         )}
-        {activeTab === 'cart' && (
-          <CartPanel
-            cartItems={cartItems}
-            setCartItems={setCartItems}
-            orderTotal={orderTotal}
-          />
-        )}
-        {activeTab === 'customer' && (
-          <CustomerTablePanel
-            selectedTable={selectedTable}
-            setSelectedTable={setSelectedTable}
-            customerInfo={customerInfo}
-            setCustomerInfo={setCustomerInfo}
-          />
-        )}
-        {activeTab === 'payment' && (
-          <CheckoutPanel total={orderTotal} onCheckout={handleCheckout} />
-        )}
-        {activeTab === 'printer' && <PrinterSettingsPanel />}
-        {activeTab === 'recent' && <RecentOrdersPanel />}
-        {activeTab === 'settings' && <SettingsPanel />}
+        {/* {activeTab === 'hold' && <HoldOrdersPanel />}
+        {activeTab === 'bill' && <BillListPanel />}
+        {activeTab === 'kot' && <KOTPanel />}
+        {activeTab === 'delivery' && <DeliveryMethodPanel />}
+        {activeTab === 'takeaway' && <TakeAwayPanel />} */}
       </div>
+
+      {/* Modal chọn bàn khi chọn Din In */}
+      {/* {showDinInModal && <DinInModal onClose={() => setShowDinInModal(false)} />} */}
+    
     </div>
   );
 }

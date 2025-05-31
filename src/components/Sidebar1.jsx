@@ -14,7 +14,8 @@ import {
   Bell,
   User,
   CreditCard,
-  Utensils
+  Utensils,
+  Unplug
 } from 'lucide-react';
 import { Menu } from '@headlessui/react';
 
@@ -59,6 +60,7 @@ export default function Sidebar() {
     { to: '/employees', title: 'Quản Lý Nhân Viên', icon: Users },
     { to: '/report', title: 'Báo Cáo', icon: BarChart },
     { to: '/tutorials', title: 'Công Thức / Hướng Dẫn', icon: BookOpen },
+    { to: '/device', title: 'Quản Lý Thiết Bị', icon: Unplug },
     { to: '/accounts', title: 'Tài khoản', icon: User },
     
   ];

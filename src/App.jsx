@@ -16,6 +16,7 @@ import { useEffect, useState, useRef } from 'react';
 import SidebarNotification from './components/ui/SidebarNotification';
 import POSPage from './pages/POSPage';
 import ProductCategoryPage from './pages/ProductCategoryPage';
+import DeviceManagementPage from './pages/DeviceManagementPage';
 
 function DashboardLayout({ children }) {
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -154,6 +155,11 @@ export default function App() {
           <Route path="/product-categories" element={
           <DashboardLayout>
             <ProductCategoryPage />
+          </DashboardLayout>
+        } />
+        <Route path="/device" element={
+          <DashboardLayout>
+            <DeviceManagementPage />
           </DashboardLayout>
         } />
       </Routes>
