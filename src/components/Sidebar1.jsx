@@ -15,9 +15,10 @@ import {
   User,
   CreditCard,
   Utensils,
-  Unplug
+  Unplug,
 } from 'lucide-react';
-import { Menu } from '@headlessui/react';
+import { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -42,10 +43,17 @@ export default function Sidebar() {
   ];
 
   const [showTitles, setShowTitles] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // trạng thái dropdown
 
   const handleLogout = () => {
     console.log('Logging out...');
+    setIsMenuOpen(false); // đóng dropdown
     // TODO: Add real logout logic
+  };
+
+  const handleNavigateAndClose = (path) => {
+    navigate(path);
+    setIsMenuOpen(false);
   };
 
   const links = [
@@ -54,7 +62,7 @@ export default function Sidebar() {
     { to: '/menu', title: 'Quản Lý Thực đơn', icon: Coffee },
     { to: '/kitchen', title: 'Quản Lý Bếp', icon: Flame },
     { to: '/orders', title: 'Quản Lý Đơn hàng', icon: ClipboardList },
-    { to: '/pos', title: 'POS', icon: CreditCard }, // hoặc ShoppingCart
+    { to: '/pos', title: 'POS', icon: CreditCard },
     { to: '/tables', title: 'Quản Lý Bàn', icon: LayoutGrid },
     { to: '/inventory', title: 'Quản Lý Kho', icon: Boxes },
     { to: '/employees', title: 'Quản Lý Nhân Viên', icon: Users },
@@ -62,97 +70,125 @@ export default function Sidebar() {
     { to: '/tutorials', title: 'Công Thức / Hướng Dẫn', icon: BookOpen },
     { to: '/device', title: 'Quản Lý Thiết Bị', icon: Unplug },
     { to: '/accounts', title: 'Tài khoản', icon: User },
-    
   ];
 
   return (
     <aside className="w-20 sm:w-24 bg-primary text-white flex flex-col items-center py-6 space-y-6">
       {/* Avatar + Dropdown */}
       <Menu as="div" className="relative mb-2">
-        <Menu.Button
-          as="div"
-          className="relative flex flex-col items-center cursor-pointer focus:outline-none"
-        >
-          {/* Avatar */}
-          <img
-            src={user.avatar}
-            alt="Avatar"
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-white"
-          />
-          <span className="text-xs text-center leading-tight font-medium max-w-[5rem] truncate">
-            {user.name}
-          </span>
+  <Menu.Button className="relative flex flex-col items-center cursor-pointer focus:outline-none">
+    <img
+      src={user.avatar}
+      alt="Avatar"
+      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-white"
+    />
+    <span className="text-xs text-center leading-tight font-medium max-w-[5rem] truncate">
+      {user.name}
+    </span>
+    <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow">
+      <Bell className="w-4 h-4 text-red-500" />
+      {notifications.length > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 rounded-full font-semibold">
+          {notifications.length}
+        </span>
+      )}
+    </div>
+  </Menu.Button>
 
-          {/* Bell icon nằm trên avatar */}
-          <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow">
-            <Bell className="w-4 h-4 text-red-500" />
-            {notifications.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 rounded-full font-semibold">
-                {notifications.length}
-              </span>
-            )}
-          </div>
-        </Menu.Button>
+  <Transition
+    as={Fragment}
+    enter="transition ease-out duration-100"
+    enterFrom="transform opacity-0 scale-95"
+    enterTo="transform opacity-100 scale-100"
+    leave="transition ease-in duration-75"
+    leaveFrom="transform opacity-100 scale-100"
+    leaveTo="transform opacity-0 scale-95"
+  >
+    <Menu.Items className="absolute left-full top-0 z-50 mt-2 w-64 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-black">
+      <div className="p-2 max-h-80 overflow-y-auto">
+        {notifications.length === 0 ? (
+          <div className="text-center text-gray-500 py-2">Không có thông báo</div>
+        ) : (
+          notifications.slice(0, 10).map((note) => (
+            <Menu.Item key={note.id} as="div" onClick={(e) => e.preventDefault()}>
+              {({ active }) => (
+                <div className={`p-2 rounded cursor-default select-none ${active ? 'bg-green-100' : ''}`}>
+                  {note.text}
+                </div>
+              )}
+            </Menu.Item>
+          ))
+        )}
+      </div>
 
-        <Menu.Items className="absolute left-full top-0 z-50 mt-2 w-64 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-black">
-          <div className="p-2 max-h-80 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <div className="text-center text-gray-500 py-2">Không có thông báo</div>
-            ) : (
-              <>
-                {notifications.slice(0, 10).map((note) => (
-                  <Menu.Item key={note.id}>
-                    {({ active }) => (
-                      <div className={`p-2 rounded cursor-pointer ${active ? 'bg-green-100' : ''}`}>
-                        {note.text}
-                      </div>
-                    )}
-                  </Menu.Item>
-                ))}
-              </>
-            )}
-          </div>
-
-          {/* Xem tất cả */}
-          {notifications.length > 10 && (
-            <div className="border-t border-gray-200 px-4 py-2 text-center">
+      {notifications.length > 10 && (
+        <div className="border-t border-gray-200 px-4 py-2 text-center">
+          <Menu.Item>
+            {({ close }) => (
               <button
-                onClick={() => navigate('/notifications')}
+                onClick={() => {
+                  navigate('/notifications');
+                  close();
+                }}
                 className="text-green-600 text-sm font-medium hover:underline"
               >
                 Xem tất cả
               </button>
-            </div>
-          )}
+            )}
+          </Menu.Item>
+        </div>
+      )}
 
-          {/* Cài đặt, Đổi Tiêu Đề, Đăng xuất */}
-          <div className="border-t border-gray-200 px-4 py-2 flex flex-col gap-2">
+      {/* Footer actions */}
+      <div className="border-t border-gray-200 px-4 py-2 flex flex-col gap-2">
+        <Menu.Item>
+          {({ close }) => (
             <button
-              onClick={() => navigate('/accounts')}
+              onClick={() => {
+                navigate('/accounts');
+                close();
+              }}
               className="text-sm text-gray-800 hover:underline flex items-center gap-2"
             >
               <User className="w-4 h-4" />
               Cài đặt tài khoản
             </button>
+          )}
+        </Menu.Item>
 
+        <Menu.Item>
+          {({ close }) => (
             <button
-              onClick={() => setShowTitles((prev) => !prev)}
+              onClick={() => {
+                setShowTitles((prev) => !prev);
+                close();
+              }}
               className="text-sm text-gray-800 hover:underline flex items-center gap-2"
             >
               <LayoutDashboard className="w-4 h-4" />
               {showTitles ? 'Đổi Icon' : 'Đổi Tiêu Đề'}
             </button>
+          )}
+        </Menu.Item>
 
+        <Menu.Item>
+          {({ close }) => (
             <button
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                close();
+              }}
               className="text-sm text-red-600 hover:underline flex items-center gap-2"
             >
               <LogOut className="w-4 h-4" />
               Đăng xuất
             </button>
-          </div>
-        </Menu.Items>
-      </Menu>
+          )}
+          </Menu.Item>
+        </div>
+      </Menu.Items>
+    </Transition>
+  </Menu>
 
       {/* Navigation links */}
       {links.map(({ to, title, icon: Icon }) => (
