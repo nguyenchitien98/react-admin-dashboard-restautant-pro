@@ -1,3 +1,4 @@
+// src/pages/POS/OrderSelecton.jsx
 import { useState } from 'react';
 import { ScrollArea } from '@/components/ui/Scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog';
@@ -47,10 +48,9 @@ const sampleMenu = [
   },
 ];
 
-export default function OrderSelection() {
+export default function OrderSelection({ cartItems, setCartItems, serviceType, onCreateOrder }) {
   const [selectedCategory, setSelectedCategory] = useState('Tất cả');
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderItems, setOrderItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -64,7 +64,7 @@ export default function OrderSelection() {
   };
 
   const addItem = (item) => {
-    setOrderItems((prev) => {
+    setCartItems((prev) => {
       const existing = prev.find(
         (i) => i.id === item.id && i.size === item.size
       );
@@ -84,18 +84,14 @@ export default function OrderSelection() {
       toast.error('Vui lòng chọn phương thức phục vụ trước.');
       return;
     }
-    if (serviceType === 'dinin' && !table) {
-      setShowTableModal(true);
+    if (cartItems.length === 0) {
+      toast.error('Không có món nào trong đơn hàng.');
       return;
     }
-    // Logic tạo đơn hàng và gửi cho bếp/quầy
-    console.log('Tạo đơn:', {
-      items: orderItems,
+    onCreateOrder({
+      items: cartItems,
       serviceType,
-      table,
     });
-    toast.success('Đơn hàng đã được tạo và gửi cho bếp!');
-    setOrderItems([]);
   };
 
   const filteredMenu = sampleMenu.filter(
@@ -105,18 +101,18 @@ export default function OrderSelection() {
   );
 
   const removeItem = (id) => {
-    setOrderItems((prev) => prev.filter((i) => i.id !== id));
+    setCartItems((prev) => prev.filter((i) => i.id !== id));
   };
 
   const changeQty = (id, delta) => {
-    setOrderItems((prev) =>
+    setCartItems((prev) =>
       prev.map((i) =>
         i.id === id ? { ...i, qty: Math.max(i.qty + delta, 1) } : i
       )
     );
   };
 
-  const total = orderItems.reduce((sum, item) => sum + item.qty * item.price, 0);
+  const total = cartItems.reduce((sum, item) => sum + item.qty * item.price, 0);
 
   return (
     <div className="flex max-h-screen">
@@ -139,7 +135,7 @@ export default function OrderSelection() {
         {/* Menu Items */}
         <div className="col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <Search className="w-5 h-5 text-gray-500" />
+            <Search className="w-7 h-7 mb-3 text-gray-500" />
             <Input
               placeholder="Tìm món..."
               value={searchTerm}
@@ -174,7 +170,7 @@ export default function OrderSelection() {
           <div>
             <h2 className="text-lg font-semibold mb-2">🧾 Đơn hàng</h2>
             <ScrollArea className="h-[65vh] pr-2">
-              {orderItems.map((item) => (
+              {cartItems.map((item) => (
                 <div key={item.id} className="py-2 border-b space-y-1">
                   <div className="flex justify-between items-center">
                     <div className="font-medium flex-1">
@@ -213,7 +209,7 @@ export default function OrderSelection() {
                   </div>
                 </div>
               ))}
-              {orderItems.length === 0 && (
+              {cartItems.length === 0 && (
                 <div className="text-gray-500 italic text-center py-10">
                   Chưa có món nào
                 </div>
@@ -231,7 +227,7 @@ export default function OrderSelection() {
                 Huỷ đơn
               </Button>
               <Button className="flex-1 bg-green-600 hover:bg-green-700" onClick={handleCreateOrder}>
-                Tiếp tục
+                Tạo Đơn
               </Button>
             </div>
           </div>
